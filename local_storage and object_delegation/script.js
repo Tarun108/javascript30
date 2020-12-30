@@ -3,18 +3,26 @@ const itemsList = document.querySelector('.plates');
 const items = JSON.parse(localStorage.getItem('items')) || [];
 
 function subItem(e) {
-    e.preventDefault();
 
-    const text = (this.querySelector('[name=item]')).value;
+//e.preventDefault();
 
-    const item = {
-        text,
-        done: false
-    };
-    items.push(item);
-    popList(items, itemsList);
-    localStorage.setItem('items', JSON.stringify(items));
-    this.reset();
+const text = (this.querySelector('[name=item]')).value;
+
+const item = {
+    text,
+    done: false
+};
+items.push(item);
+popList(items, itemsList);
+localStorage.setItem('items', JSON.stringify(items));
+this.reset();
+
+// for select button
+    if(items.length == 0){
+        sel_btn.style.display = 'none';
+        console.log('runig');
+
+    }
 }
 
 function popList(plates = [], platesList) {
@@ -40,3 +48,45 @@ popList(items, itemsList);
 addItems.addEventListener('submit', subItem);
 itemsList.addEventListener('click', toggledone);
 
+// delete all button 
+
+const btn = document.querySelector('.del_btn');
+const ul = document.querySelector('ul');
+
+function deletes() {
+
+    localStorage.removeItem("items");
+    items.splice(0,items.length);
+    while (ul.hasChildNodes()) {  
+        ul.removeChild(ul.firstChild);
+      }
+    //const lis= Array.from(ul);  
+   // ul.innerHTML.removeChild();
+
+   // for select button
+   if(items.length == 0){
+    sel_btn.style.display = 'none';
+    console.log('runig');
+}
+}
+btn.addEventListener('click', deletes);
+
+// select all button
+const sel_btn = document.querySelector('.sel_all');
+
+
+    if(items.length == 0){
+        sel_btn.style.display = 'none';
+        console.log('runig');
+    }
+
+function selecting(e) {
+   items.forEach(item => {
+       item.done = 'true';    
+   });
+   localStorage.setItem('items', JSON.stringify(items));
+
+  location.reload();
+}
+
+sel_btn.addEventListener('click', selecting);
